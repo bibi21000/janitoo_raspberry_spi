@@ -70,9 +70,11 @@ class I2CBus(JNTBus):
         """
         JNTBus.__init__(self, **kwargs)
         self._lock = threading.Lock()
-    
-    def acquire(self)
+
+    def acquire(self):
+        """Get a lock on the bus"""
         pass
 
-    def release(self)
+    def release(self):
+        """Release a lock on the bus"""
         pass
