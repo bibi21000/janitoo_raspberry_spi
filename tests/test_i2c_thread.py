@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Unittests for Janitoo-Raspberry Pi Server.
+"""Unittests for Janitoo-Roomba Server.
 """
 __license__ = """
     This file is part of Janitoo.
@@ -32,6 +32,7 @@ from pkg_resources import iter_entry_points
 
 from janitoo_nosetests.server import JNTTServer, JNTTServerCommon
 from janitoo_nosetests.thread import JNTTThread, JNTTThreadCommon
+from janitoo_nosetests.component import JNTTComponent, JNTTComponentCommon
 
 from janitoo.utils import json_dumps, json_loads
 from janitoo.utils import HADD_SEP, HADD
@@ -40,8 +41,7 @@ from janitoo.utils import TOPIC_NODES, TOPIC_NODES_REPLY, TOPIC_NODES_REQUEST
 from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
 from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_SYSTEM, TOPIC_VALUES_BASIC
 
-from janitoo_raspberry.server import PiServer
-
+from janitoo_raspberry_i2c.thread_i2c import RpiI2CThread
 ##############################################################
 #Check that we are in sync with the official command classes
 #Must be implemented for non-regression
@@ -52,25 +52,7 @@ COMMAND_DISCOVERY = 0x5000
 assert(COMMAND_DESC[COMMAND_DISCOVERY] == 'COMMAND_DISCOVERY')
 ##############################################################
 
-JNTTServer.skipRasperryTest()
-
-class TestPiSerser(JNTTServer, JNTTServerCommon):
-    """Test the pi server
+class TestRpiI2CThread(JNTTThread, JNTTThreadCommon):
+    """Test the thread
     """
-    loglevel = logging.DEBUG
-    path = '/tmp/janitoo_test'
-    broker_user = 'toto'
-    broker_password = 'toto'
-    server_class = PiServer
-    server_conf = "tests/data/janitoo_raspberry_i2c.conf"
-
-    def test_110_request_system_values(self):
-        self.start()
-        nodeHADD=HADD%(139,0)
-        self.assertHeartbeatNode(hadd=nodeHADD)
-        self.assertNodeRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', node_hadd=nodeHADD, client_hadd=HADD%(9999,0))
-        self.assertBroadcastRequest(cmd_class=COMMAND_DISCOVERY, uuid='request_info_nodes', client_hadd=HADD%(9999,0))
-        self.stop()
-
-
-
+    thread_name = "rpii2c"

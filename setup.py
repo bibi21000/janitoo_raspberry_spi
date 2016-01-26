@@ -58,21 +58,12 @@ data_files_config(data_files, 'docs','src/docs/','*')
 #It will be used to collect entries without installing the package
 janitoo_entry_points = {
     "janitoo.threads": [
-        "picamera = janitoo_raspberry.thread_camera:make_thread",
-        "pigpio = janitoo_raspberry.thread_gpio:make_thread",
-    ],
-    "janitoo.components": [
-        "pigpio.input = janitoo_raspberry.gpio:make_input",
-        "pigpio.output = janitoo_raspberry.gpio:make_output",
-        "pigpio.pwm = janitoo_raspberry.gpio:make_pwm",
-        "picamera.photo = janitoo_raspberry.camera:make_photo",
-        "picamera.video = janitoo_raspberry.camera:make_video",
-        "picamera.stream = janitoo_raspberry.camera:make_stream",
+        "rpii2c = janitoo_raspberry_i2c.thread_i2c:make_thread",
     ],
 }
 
 setup(
-    name = 'janitoo_raspberry',
+    name = 'janitoo_raspberry_i2c',
     description = "A server which handle many controller (hardware, onewire, i2c, ...) dedicated to the raspberry",
     long_description = "A server which handle many controller (hardware, onewire, i2c, ...) dedicated to the raspberry",
     author='Sébastien GALLET aka bibi2100 <bibi21000@gmail.com>',
@@ -96,20 +87,18 @@ setup(
     """,
     version = janitoo_version,
     zip_safe = False,
-    scripts=['src/scripts/jnt_raspberry'],
     packages = find_packages('src', exclude=["scripts", "docs", "config"]),
     package_dir = { '': 'src' },
-    keywords = "raspberry",
+    keywords = "raspberry,i2c",
     include_package_data=True,
     data_files = data_files,
     install_requires=[
-                     'janitoo >= %s'%"0.0.6",
-                     #~ 'janitoo_buses == %s'%janitoo_version,
-                     'picamera',
-                     'RPi.GPIO',
+                     'janitoo',
+                     'janitoo_raspberry',
                     ],
     dependency_links = [
-      'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo-%s'%"0.0.7",
+      'https://github.com/bibi21000/janitoo/archive/master.zip#egg=janitoo',
+      'https://github.com/bibi21000/janitoo_raspberry/archive/master.zip#egg=janitoo_raspberry',
     ],
     entry_points = janitoo_entry_points,
 )

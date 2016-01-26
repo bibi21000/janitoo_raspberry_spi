@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
+"""The Raspberry i2c bus
 
-"""Unittests for Datalog Server.
+
+
+Installation :
+
+.. code-block:: bash
+
+    sudo apt-get install python-pycamera
+
 """
+
 __license__ = """
     This file is part of Janitoo.
 
@@ -23,42 +32,43 @@ __author__ = 'Sébastien GALLET aka bibi21000'
 __email__ = 'bibi21000@gmail.com'
 __copyright__ = "Copyright © 2013-2014-2015 Sébastien GALLET aka bibi21000"
 
-import sys, os
-import time, datetime
-import unittest
-import threading
+# Set default logging handler to avoid "No handler found" warnings.
 import logging
-from pkg_resources import iter_entry_points
-
-from janitoo_nosetests.server import JNTTServer, JNTTServerCommon
-from janitoo_nosetests.thread import JNTTThread, JNTTThreadCommon
-SKIP = False
-try:
-    from janitoo_nosetests.packaging import JNTTPackaging, JNTTPackagingCommon
-except:
-    print "Skip tests"
-    SKIP = True
-
-from janitoo.utils import json_dumps, json_loads
-from janitoo.utils import HADD_SEP, HADD
-from janitoo.utils import TOPIC_HEARTBEAT
-from janitoo.utils import TOPIC_NODES, TOPIC_NODES_REPLY, TOPIC_NODES_REQUEST
-from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
-from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_SYSTEM, TOPIC_VALUES_BASIC
+logger = logging.getLogger(__name__)
+import os, sys
+import threading
+import time
+import datetime
+import socket
+from janitoo.thread import JNTBusThread
+from janitoo.bus import JNTBus
+from janitoo.component import JNTComponent
+from janitoo.thread import BaseThread
+from janitoo.options import get_option_autostart
 
 ##############################################################
 #Check that we are in sync with the official command classes
 #Must be implemented for non-regression
 from janitoo.classes import COMMAND_DESC
 
-COMMAND_DISCOVERY = 0x5000
+COMMAND_CONTROLLER = 0x1050
 
-assert(COMMAND_DESC[COMMAND_DISCOVERY] == 'COMMAND_DISCOVERY')
+assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
-if not SKIP:
+def make_thread(options):
+    if get_option_autostart(options, 'rpii2c') == True:
+        return RpiI2CThread(options)
+    else:
+        return None
 
-    class TestPackage(JNTTPackaging, JNTTPackagingCommon):
-        """Test the package
+class RpiI2CThread(JNTBusThread):
+    """The I2C thread
+
+    """
+    def init_bus(self):
+        """Build the bus
         """
-        pass
+        from janitoo_raspberry_i2c.bus_i2c import I2CBus
+        self.section = 'rpii2c'
+        self.bus = I2CBus(options=self.options, oid=self.section, product_name="Raspberry I2C bus")
