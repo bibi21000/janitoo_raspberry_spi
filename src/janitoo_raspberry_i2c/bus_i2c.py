@@ -68,6 +68,11 @@ class I2CBus(JNTBus):
         :param int bus_id: the SMBus id (see Raspberry Pi documentation)
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
+        try:
+            os.system('modprobe i2c-dev')
+            os.system('modprobe i2c-bcm2708')
+        except :
+            log.exception("Can't load i2c-* kernel modules")
         JNTBus.__init__(self, **kwargs)
         self._lock = threading.Lock()
 
