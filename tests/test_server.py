@@ -45,18 +45,6 @@ from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_S
 
 from janitoo_raspberry.server import PiServer
 
-##############################################################
-#Check that we are in sync with the official command classes
-#Must be implemented for non-regression
-from janitoo.classes import COMMAND_DESC
-
-COMMAND_DISCOVERY = 0x5000
-
-assert(COMMAND_DESC[COMMAND_DISCOVERY] == 'COMMAND_DISCOVERY')
-##############################################################
-
-JNTTServer.skipRasperryTest()
-
 class TestPiSerser(JNTTServer, JNTTServerCommon):
     """Test the pi server
     """
@@ -66,8 +54,9 @@ class TestPiSerser(JNTTServer, JNTTServerCommon):
     broker_password = 'toto'
     server_class = PiServer
     server_conf = "tests/data/janitoo_raspberry_i2c.conf"
+    hadds = [HADD%(159,0)]
 
     def test_040_server_start_no_error_in_log(self):
         self.onlyRasperryTest()
-        JNTTServer.test_040_server_start_no_error_in_log(self)
+        JNTTServerCommon.test_040_server_start_no_error_in_log(self)
 
