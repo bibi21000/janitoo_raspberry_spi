@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Raspberry camera worker
-
-Installation :
-
-.. code-block:: bash
-
-    sudo apt-get install python-pycamera
+"""The Raspberry i2c bus
 
 """
 
@@ -38,6 +32,9 @@ import threading
 import time
 import datetime
 import socket
+
+import Adafruit_GPIO.I2C as I2C
+
 from janitoo.thread import JNTBusThread
 from janitoo.bus import JNTBus
 from janitoo.component import JNTComponent
@@ -63,6 +60,7 @@ assert(COMMAND_DESC[COMMAND_CAMERA_STREAM] == 'COMMAND_CAMERA_STREAM')
 class I2CBus(JNTBus):
     """A pseudo-bus to handle the Raspberry I2C Bus
     """
+
     def __init__(self, **kwargs):
         """
         :param int bus_id: the SMBus id (see Raspberry Pi documentation)
@@ -70,16 +68,21 @@ class I2CBus(JNTBus):
         """
         try:
             os.system('modprobe i2c-dev')
+        except :
+            log.exception("[%s] - Can't load i2c-* kernel modules", self.__class__.__name__)
+        try:
             os.system('modprobe i2c-bcm2708')
         except :
-            log.exception("Can't load i2c-* kernel modules")
+            log.exception("[%s] - Can't load i2c-* kernel modules", self.__class__.__name__)
         JNTBus.__init__(self, **kwargs)
-        self._lock = threading.Lock()
+        self._i2c_lock = threading.Lock()
+        self._ada_i2c = I2C
+        """ The shared ADAFruit I2C bus """
 
-    def acquire(self):
+    def i2c_acquire(self):
         """Get a lock on the bus"""
-        pass
+        self._i2c_lock.acquire()
 
-    def release(self):
+    def i2c_release(self):
         """Release a lock on the bus"""
-        pass
+        self._i2c_lock.release()
