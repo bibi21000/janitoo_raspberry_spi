@@ -33,13 +33,13 @@ import time
 import datetime
 import socket
 
-import Adafruit_GPIO.I2C as I2C
-
 from janitoo.thread import JNTBusThread
 from janitoo.bus import JNTBus
 from janitoo.component import JNTComponent
 from janitoo.thread import BaseThread
 from janitoo.options import get_option_autostart
+
+import Adafruit_GPIO.I2C as I2C
 
 ##############################################################
 #Check that we are in sync with the official command classes
