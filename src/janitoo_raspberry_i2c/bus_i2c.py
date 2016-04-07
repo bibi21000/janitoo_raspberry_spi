@@ -78,6 +78,7 @@ class I2CBus(JNTBus):
         self._i2c_lock = threading.Lock()
         self._ada_i2c = I2C
         """ The shared ADAFruit I2C bus """
+        self.load_extensions(self.oid)
 
     def i2c_acquire(self):
         """Get a lock on the bus"""
