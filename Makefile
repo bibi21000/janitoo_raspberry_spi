@@ -132,6 +132,7 @@ develop:
 	@echo "Installation for developpers of ${MODULENAME} finished."
 
 docker-deps:
+	pip install smbus-cffi
 	@echo
 	@echo "Docker dependencies for ${MODULENAME} installed."
 
@@ -158,7 +159,6 @@ docker-tests:
 	@echo "Docker tests for ${MODULENAME} finished."
 
 docker-inst:
-	pip install smbus-cffi
 	@echo "Configure Docker image."
 	@echo
 
