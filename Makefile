@@ -157,6 +157,11 @@ docker-tests:
 	@echo
 	@echo "Docker tests for ${MODULENAME} finished."
 
+docker-inst:
+	pip install smbus-cffi
+	@echo "Configure Docker image."
+	@echo
+
 tests:
 	-mkdir -p ${BUILDDIR}/docs/html/tools/coverage
 	-mkdir -p ${BUILDDIR}/docs/html/tools/nosetests
