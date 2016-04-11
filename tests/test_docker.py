@@ -43,7 +43,7 @@ from janitoo.runner import Runner, jnt_parse_args
 from janitoo.server import JNTServer
 from janitoo.utils import HADD_SEP, HADD
 
-class TestPiSerser(JNTTDockerServer, JNTTDockerServerCommon):
+class TestRaspberryI2CSerser(JNTTDockerServer, JNTTDockerServerCommon):
     """Test the server
     """
     loglevel = logging.DEBUG
