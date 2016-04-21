@@ -95,7 +95,6 @@ setup(
     install_requires=[
                      'janitoo',
                      'janitoo_raspberry',
-                     'janitoo_raspberry_gpio',
                      'Adafruit-GPIO',
                     ],
     dependency_links = [
