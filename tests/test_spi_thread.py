@@ -44,9 +44,9 @@ from janitoo.utils import TOPIC_NODES, TOPIC_NODES_REPLY, TOPIC_NODES_REQUEST
 from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
 from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_SYSTEM, TOPIC_VALUES_BASIC
 
-from janitoo_raspberry_i2c.thread_i2c import RpiI2CThread
+from janitoo_raspberry_spi.thread_spi import RpiSPIThread
 
 class TestRpiI2CThread(JNTTThread, JNTTThreadCommon):
     """Test the thread
     """
-    thread_name = "rpii2c"
+    thread_name = "rpispi"

@@ -39,7 +39,7 @@ from janitoo.component import JNTComponent
 from janitoo.thread import BaseThread
 from janitoo.options import get_option_autostart
 
-import Adafruit_GPIO.I2C as I2C
+import Adafruit_GPIO.SPI as SPI
 
 ##############################################################
 #Check that we are in sync with the official command classes
@@ -57,8 +57,8 @@ assert(COMMAND_DESC[COMMAND_CAMERA_VIDEO] == 'COMMAND_CAMERA_VIDEO')
 assert(COMMAND_DESC[COMMAND_CAMERA_STREAM] == 'COMMAND_CAMERA_STREAM')
 ##############################################################
 
-class I2CBus(JNTBus):
-    """A pseudo-bus to handle the Raspberry I2C Bus
+class SPIBus(JNTBus):
+    """A pseudo-bus to handle the Raspberry SPI Bus
     """
 
     def __init__(self, **kwargs):
@@ -67,25 +67,21 @@ class I2CBus(JNTBus):
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
         try:
-            os.system('modprobe i2c-dev')
+            os.system('modprobe spi-bcm2708')
         except :
-            log.exception("[%s] - Can't load i2c-* kernel modules", self.__class__.__name__)
-        try:
-            os.system('modprobe i2c-bcm2708')
-        except :
-            log.exception("[%s] - Can't load i2c-* kernel modules", self.__class__.__name__)
+            log.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         JNTBus.__init__(self, **kwargs)
-        self._i2c_lock = threading.Lock()
-        self._ada_i2c = I2C
-        """ The shared ADAFruit I2C bus """
+        self._spi_lock = threading.Lock()
+        self._ada_spi = SPI
+        """ The shared ADAFruit SPI bus """
         self.load_extensions(self.oid)
-        self.export_attrs('i2c_acquire', self.i2c_acquire)
-        self.export_attrs('i2c_release', self.i2c_release)
+        self.export_attrs('spi_acquire', self.spi_acquire)
+        self.export_attrs('spi_release', self.spi_release)
 
-    def i2c_acquire(self):
+    def spi_acquire(self):
         """Get a lock on the bus"""
-        self._i2c_lock.acquire()
+        self._spi_lock.acquire()
 
-    def i2c_release(self):
+    def spi_release(self):
         """Release a lock on the bus"""
-        self._i2c_lock.release()
+        self._spi_lock.release()

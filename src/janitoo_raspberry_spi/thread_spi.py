@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Raspberry i2c bus
-
-
-
-Installation :
-
-.. code-block:: bash
-
-    sudo apt-get install python-pycamera
-
+"""The Raspberry SPI bus
 """
 
 __license__ = """
@@ -57,18 +48,18 @@ assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
 def make_thread(options):
-    if get_option_autostart(options, 'rpii2c') == True:
-        return RpiI2CThread(options)
+    if get_option_autostart(options, 'rpispi') == True:
+        return RpiSPIThread(options)
     else:
         return None
 
-class RpiI2CThread(JNTBusThread):
-    """The I2C thread
+class RpiSPIThread(JNTBusThread):
+    """The SPI thread
 
     """
     def init_bus(self):
         """Build the bus
         """
-        from janitoo_raspberry_i2c.bus_i2c import I2CBus
-        self.section = 'rpii2c'
-        self.bus = I2CBus(options=self.options, oid=self.section, product_name="Raspberry I2C bus")
+        from janitoo_raspberry_spi.bus_spi import SPIBus
+        self.section = 'rpispi'
+        self.bus = SPIBus(options=self.options, oid=self.section, product_name="Raspberry SPI bus")
