@@ -60,6 +60,10 @@ janitoo_entry_points = {
     "janitoo.threads": [
         "rpispi = janitoo_raspberry_spi.thread_spi:make_thread",
     ],
+    "rpispi.extensions": [
+        "hardware = janitoo_raspberry_spi.bus_spi:extend_hardware",
+        "software = janitoo_raspberry_spi.bus_spi:extend_software",
+    ],
 }
 
 setup(

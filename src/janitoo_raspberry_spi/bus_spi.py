@@ -39,6 +39,7 @@ from janitoo.component import JNTComponent
 from janitoo.thread import BaseThread
 from janitoo.options import get_option_autostart
 
+import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.SPI as SPI
 
 ##############################################################
@@ -57,6 +58,8 @@ assert(COMMAND_DESC[COMMAND_CAMERA_VIDEO] == 'COMMAND_CAMERA_VIDEO')
 assert(COMMAND_DESC[COMMAND_CAMERA_STREAM] == 'COMMAND_CAMERA_STREAM')
 ##############################################################
 
+OID = 'rpispi'
+
 class SPIBus(JNTBus):
     """A pseudo-bus to handle the Raspberry SPI Bus
     """
@@ -66,15 +69,13 @@ class SPIBus(JNTBus):
         :param int bus_id: the SMBus id (see Raspberry Pi documentation)
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
-        try:
-            os.system('modprobe spi-bcm2708')
-        except :
-            log.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         JNTBus.__init__(self, **kwargs)
         self._spi_lock = threading.Lock()
         self._ada_spi = SPI
-        """ The shared ADAFruit SPI bus """
+        self._ada_gpio = GPIO.get_platform_gpio()
         self.load_extensions(self.oid)
+        self.export_attrs('_ada_spi', self._ada_spi)
+        self.export_attrs('_ada_gpio', self._ada_spi)
         self.export_attrs('spi_acquire', self.spi_acquire)
         self.export_attrs('spi_release', self.spi_release)
 
@@ -85,3 +86,79 @@ class SPIBus(JNTBus):
     def spi_release(self):
         """Release a lock on the bus"""
         self._spi_lock.release()
+
+    def get_spi_device(self, num):
+        """Return a device to use with adafruit bus"""
+        raise RuntimeError("Must be overloaded by descendant")
+
+def extend_hardware( self ):
+    #You must choose either software or hardware bus
+    uuid="%s_port"%OID
+    self.values[uuid] = self.value_factory['config_byte'](options=self.options, uuid=uuid,
+        node_uuid=self.uuid,
+        help='The SPI hardware port',
+        label='port',
+        default=0,
+    )
+
+    self._spih_start = self.start
+    def start(mqttc, trigger_thread_reload_cb=None):
+        """Start the bus"""
+        logger.debug("[%s] - Start the bus %s", self.__class__.__name__, self.oid )
+        self._bus.spi_acquire()
+        try:
+            os.system('modprobe spi-bcm2708')
+        except :
+            log.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
+        finally:
+            self._bus.spi_release()
+        return self._spih_start(mqttc, trigger_thread_reload_cb=trigger_thread_reload_cb)
+    self.start = start
+
+    def get_spi_device(device, max_speed_hz=4000000):
+        """Return a device to use with adafruit bus"""
+        self._bus.spi_acquire()
+        try:
+            return SPI.SpiDev(self.values["%s_port"%OID].data, device, max_speed_hz=max_speed_hz)
+        except:
+            logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
+        finally:
+            self._bus.spi_release()
+    self.get_spi_device = get_spi_device
+
+def extend_software( self ):
+    #You must choose either software or hardware bus
+    uuid="%s_pin_mosi"%OID
+    self.values[uuid] = self.value_factory['config_byte'](options=self.options, uuid=uuid,
+        node_uuid=self.uuid,
+        help='The SPI MOSI pin',
+        label='pin_mosi',
+        default=23,
+    )
+    uuid="%s_pin_miso"%OID
+    self.values[uuid] = self.value_factory['config_byte'](options=self.options, uuid=uuid,
+        node_uuid=self.uuid,
+        help='The SPI MISO pin',
+        label='pin_miso',
+        default=24,
+    )
+    uuid="%s_pin_clk"%OID
+    self.values[uuid] = self.value_factory['config_byte'](options=self.options, uuid=uuid,
+        node_uuid=self.uuid,
+        help='The SPI CLK pin',
+        label='pin_clk',
+        default=25,
+    )
+
+    def get_spi_device(device, max_speed_hz=4000000):
+        """Return a device to use with adafruit bus"""
+        self._bus.spi_acquire()
+        try:
+            return SPI.BitBang(self._ada_gpio, self.values["%s_pin_clk"%OID].data,
+                    self.values["%s_pin_mosi"%OID].data,
+                    self.values["%s_pin_miso"%OID].data)
+        except:
+            logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
+        finally:
+            self._bus.spi_release()
+    self.get_spi_device = get_spi_device
