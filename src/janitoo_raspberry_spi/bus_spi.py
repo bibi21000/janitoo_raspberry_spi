@@ -82,6 +82,7 @@ class SPIBus(JNTBus):
         self.export_attrs('spi_acquire', self.spi_acquire)
         self.export_attrs('spi_release', self.spi_release)
         self.export_attrs('get_spi_device', self.get_spi_device)
+        self.export_attrs('get_spi_device_pin', self.get_spi_device_pin)
 
     def spi_acquire(self):
         """Get a lock on the bus"""
