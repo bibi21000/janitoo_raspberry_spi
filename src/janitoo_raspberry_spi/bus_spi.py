@@ -120,25 +120,25 @@ def extend_hardware( self ):
     def start(mqttc, trigger_thread_reload_cb=None):
         """Start the bus"""
         logger.debug("[%s] - Start the bus %s", self.__class__.__name__, self.oid )
-        self._bus.spi_acquire()
+        self.spi_acquire()
         try:
             os.system('modprobe spi-bcm2708')
         except :
             logger.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         finally:
-            self._bus.spi_release()
+            self.spi_release()
         return self._spih_start(mqttc, trigger_thread_reload_cb=trigger_thread_reload_cb)
     self.start = start
 
     def get_spi_device(device, max_speed_hz=4000000):
         """Return a device to use with adafruit bus"""
-        self._bus.spi_acquire()
+        self.spi_acquire()
         try:
             return SPI.SpiDev(self.values["%s_port"%OID].data, device, max_speed_hz=max_speed_hz)
         except:
             logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
         finally:
-            self._bus.spi_release()
+            self.spi_release()
     self.get_spi_device = get_spi_device
 
 def extend_software( self ):
@@ -167,7 +167,7 @@ def extend_software( self ):
 
     def get_spi_device(device, max_speed_hz=4000000):
         """Return a device to use with adafruit bus"""
-        self._bus.spi_acquire()
+        self.spi_acquire()
         try:
             return SPI.BitBang(self._ada_gpio, self.values["%s_pin_clk"%OID].data,
                     self.values["%s_pin_mosi"%OID].data,
@@ -175,5 +175,5 @@ def extend_software( self ):
         except:
             logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
         finally:
-            self._bus.spi_release()
+            self.spi_release()
     self.get_spi_device = get_spi_device
