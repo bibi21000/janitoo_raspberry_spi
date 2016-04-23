@@ -75,7 +75,7 @@ class SPIBus(JNTBus):
             self._ada_spi = SPI
             self._ada_gpio = GPIO.get_platform_gpio()
         except :
-            log.exception("[%s] - Can't get GPIO", self.__class__.__name__)
+            logger.exception("[%s] - Can't get GPIO", self.__class__.__name__)
         self.load_extensions(self.oid)
         self.export_attrs('_ada_spi', self._ada_spi)
         self.export_attrs('_ada_gpio', self._ada_spi)
@@ -124,7 +124,7 @@ def extend_hardware( self ):
         try:
             os.system('modprobe spi-bcm2708')
         except :
-            log.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
+            logger.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         finally:
             self._bus.spi_release()
         return self._spih_start(mqttc, trigger_thread_reload_cb=trigger_thread_reload_cb)
