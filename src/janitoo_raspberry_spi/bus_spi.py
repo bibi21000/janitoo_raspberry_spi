@@ -123,7 +123,7 @@ def extend_hardware( self ):
         logger.debug("[%s] - Start the bus %s", self.__class__.__name__, self.oid )
         self.spi_acquire()
         try:
-            os.system('modprobe spi-bcm2708')
+            os.system('modprobe spi-bcm2835')
         except :
             logger.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         finally:
