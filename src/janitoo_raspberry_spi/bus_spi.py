@@ -58,18 +58,18 @@ assert(COMMAND_DESC[COMMAND_CAMERA_VIDEO] == 'COMMAND_CAMERA_VIDEO')
 assert(COMMAND_DESC[COMMAND_CAMERA_STREAM] == 'COMMAND_CAMERA_STREAM')
 ##############################################################
 
-OID = 'rpispi'
+from janitoo_raspberry_spi.thread_spi import OID
 
 class SPIBus(JNTBus):
     """A pseudo-bus to handle the Raspberry SPI Bus
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, oid=OID, **kwargs):
         """
         :param int bus_id: the SMBus id (see Raspberry Pi documentation)
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
-        JNTBus.__init__(self, **kwargs)
+        JNTBus.__init__(self, oid=oid, **kwargs)
         self._spi_lock = threading.Lock()
         self._ada_gpio = None
         try:

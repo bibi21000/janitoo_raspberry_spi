@@ -47,8 +47,10 @@ COMMAND_CONTROLLER = 0x1050
 assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
+OID = 'spi'
+
 def make_thread(options):
-    if get_option_autostart(options, 'rpispi') == True:
+    if get_option_autostart(options, OID) == True:
         return RpiSPIThread(options)
     else:
         return None
@@ -61,5 +63,5 @@ class RpiSPIThread(JNTBusThread):
         """Build the bus
         """
         from janitoo_raspberry_spi.bus_spi import SPIBus
-        self.section = 'rpispi'
+        self.section = OID
         self.bus = SPIBus(options=self.options, oid=self.section, product_name="Raspberry SPI bus")
