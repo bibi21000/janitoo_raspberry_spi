@@ -34,7 +34,7 @@ import logging
 from pkg_resources import iter_entry_points
 
 from janitoo_nosetests.server import JNTTServer, JNTTServerCommon
-from janitoo_nosetests.thread import JNTTThread, JNTTThreadCommon
+from janitoo_nosetests.bus import JNTTBus, JNTTBusCommon
 from janitoo_nosetests.component import JNTTComponent, JNTTComponentCommon
 
 from janitoo.utils import json_dumps, json_loads
@@ -44,9 +44,10 @@ from janitoo.utils import TOPIC_NODES, TOPIC_NODES_REPLY, TOPIC_NODES_REQUEST
 from janitoo.utils import TOPIC_BROADCAST_REPLY, TOPIC_BROADCAST_REQUEST
 from janitoo.utils import TOPIC_VALUES_USER, TOPIC_VALUES_CONFIG, TOPIC_VALUES_SYSTEM, TOPIC_VALUES_BASIC
 
-from janitoo_raspberry_spi.thread_spi import RpiSPIThread
+from janitoo_raspberry_spi.bus_spi import SPIBus
 
-class TestRpiSPIThread(JNTTThread, JNTTThreadCommon):
+class TestRpiSPIBus(JNTTBus, JNTTBusCommon):
     """Test the thread
     """
-    thread_name = "rpispi"
+    oid = 'rpispi'
+    bus = SPIBus
