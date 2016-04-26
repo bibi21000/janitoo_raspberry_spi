@@ -64,12 +64,12 @@ class SPIBus(JNTBus):
     """A pseudo-bus to handle the Raspberry SPI Bus
     """
 
-    def __init__(self, oid=OID, **kwargs):
+    def __init__(self, **kwargs):
         """
         :param int bus_id: the SMBus id (see Raspberry Pi documentation)
         :param kwargs: parameters transmitted to :py:class:`smbus.SMBus` initializer
         """
-        JNTBus.__init__(self, oid=oid, **kwargs)
+        JNTBus.__init__(self, **kwargs)
         self._spi_lock = threading.Lock()
         self._ada_gpio = None
         try:
@@ -81,7 +81,7 @@ class SPIBus(JNTBus):
             self._ada_spi = SPI
         except :
             logger.exception("[%s] - Can't get SPI", self.__class__.__name__)
-        self.load_extensions(self.oid)
+        self.load_extensions(OID)
         self.export_attrs('_ada_spi', self._ada_spi)
         self.export_attrs('_ada_gpio', self._ada_gpio)
         self.export_attrs('spi_acquire', self.spi_acquire)
