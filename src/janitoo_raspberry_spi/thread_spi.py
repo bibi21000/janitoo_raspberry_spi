@@ -47,7 +47,7 @@ COMMAND_CONTROLLER = 0x1050
 assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 ##############################################################
 
-OID = 'spi'
+OID = 'rpispi'
 
 def make_thread(options):
     if get_option_autostart(options, OID) == True:
