@@ -98,14 +98,14 @@ class SPIBus(JNTBus):
 
     def get_spi_device_pin(self, num):
         """Return the CS pin corresponding to an hardawre SPI device"""
-        if device==0:
+        if num==0:
             #map spi_device to pin number. On a pi2 0 ->18
             dc_pin = 18
-        elif device==1:
+        elif num==1:
             #map spi_device to pin number. On a pi2 1 ->17 ?
             dc_pin = 17
         else:
-            dc_pin = device
+            dc_pin = num
 
 def extend_hardware( self ):
     #You must choose either software or hardware bus
