@@ -92,7 +92,7 @@ class SPIBus(JNTBus):
         """Release a lock on the bus"""
         self._spi_lock.release()
 
-    def get_spi_device(self, num):
+    def get_spi_device(self, num, max_speed_hz=4000000):
         """Return a device to use with adafruit bus"""
         raise RuntimeError("Must be overloaded by descendant")
 
