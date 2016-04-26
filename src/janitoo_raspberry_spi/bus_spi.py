@@ -78,7 +78,7 @@ class SPIBus(JNTBus):
             logger.exception("[%s] - Can't get GPIO", self.__class__.__name__)
         self.load_extensions(self.oid)
         self.export_attrs('_ada_spi', self._ada_spi)
-        self.export_attrs('_ada_gpio', self._ada_spi)
+        self.export_attrs('_ada_gpio', self._ada_gpio)
         self.export_attrs('spi_acquire', self.spi_acquire)
         self.export_attrs('spi_release', self.spi_release)
         self.export_attrs('get_spi_device', self.get_spi_device)
