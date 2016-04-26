@@ -71,11 +71,16 @@ class SPIBus(JNTBus):
         """
         JNTBus.__init__(self, **kwargs)
         self._spi_lock = threading.Lock()
+        self._ada_gpio = None
         try:
-            self._ada_spi = SPI
             self._ada_gpio = GPIO.get_platform_gpio()
         except :
             logger.exception("[%s] - Can't get GPIO", self.__class__.__name__)
+        self._ada_spi = None
+        try:
+            self._ada_spi = SPI
+        except :
+            logger.exception("[%s] - Can't get SPI", self.__class__.__name__)
         self.load_extensions(self.oid)
         self.export_attrs('_ada_spi', self._ada_spi)
         self.export_attrs('_ada_gpio', self._ada_gpio)

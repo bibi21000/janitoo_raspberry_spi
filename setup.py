@@ -54,18 +54,6 @@ def data_files_config(res, rsrc, src, pattern):
 data_files = []
 data_files_config(data_files, 'docs','src/docs/','*')
 
-#You must define a variable like the one below.
-#It will be used to collect entries without installing the package
-janitoo_entry_points = {
-    "janitoo.threads": [
-        "rpispi = janitoo_raspberry_spi.thread_spi:make_thread",
-    ],
-    "rpispi.extensions": [
-        "hardware = janitoo_raspberry_spi.bus_spi:extend_hardware",
-        "software = janitoo_raspberry_spi.bus_spi:extend_software",
-    ],
-}
-
 setup(
     name = 'janitoo_raspberry_spi',
     description = "A server which handle many controller (hardware, onewire, i2c, ...) dedicated to the raspberry",
@@ -109,5 +97,13 @@ setup(
       'https://github.com/adafruit/Adafruit_Python_GPIO/archive/master.zip#egg=Adafruit-GPIO',
       'https://github.com/adafruit/Adafruit_Python_PureIO/archive/master.zip#egg=Adafruit-PureIO',
     ],
-    entry_points = janitoo_entry_points,
+    entry_points = {
+        "janitoo.threads": [
+            "rpispi = janitoo_raspberry_spi.thread_spi:make_thread",
+        ],
+        "rpispi.extensions": [
+            "hardware = janitoo_raspberry_spi.bus_spi:extend_hardware",
+            "software = janitoo_raspberry_spi.bus_spi:extend_software",
+        ],
+    },
 )
