@@ -86,16 +86,23 @@ class SPIBus(JNTBus):
         self.export_attrs('_ada_gpio', self._ada_gpio)
         self.export_attrs('spi_acquire', self.spi_acquire)
         self.export_attrs('spi_release', self.spi_release)
+        self.export_attrs('spi_locked', self.spi_locked)
         self.export_attrs('get_spi_device', self.get_spi_device)
         self.export_attrs('get_spi_device_pin', self.get_spi_device_pin)
 
     def spi_acquire(self, blocking=True):
         """Get a lock on the bus"""
-        self._spi_lock.acquire(blocking)
+        if self._spi_lock.acquire(blocking):
+            return True
+        return False
 
     def spi_release(self):
         """Release a lock on the bus"""
         self._spi_lock.release()
+
+    def spi_locked(self):
+        """Get status of the lock"""
+        return self._spi_lock.locked()
 
     def get_spi_device(self, num, max_speed_hz=4000000):
         """Return a device to use with adafruit bus"""
