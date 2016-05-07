@@ -49,8 +49,8 @@ assert(COMMAND_DESC[COMMAND_CONTROLLER] == 'COMMAND_CONTROLLER')
 
 OID = 'rpispi'
 
-def make_thread(options):
-    if get_option_autostart(options, OID) == True:
+def make_thread(options, force=False):
+    if get_option_autostart(options, OID) == True or force:
         return RpiSPIThread(options)
     else:
         return None
