@@ -71,6 +71,7 @@ class SPIBus(JNTBus):
         """
         JNTBus.__init__(self, **kwargs)
         self._spi_lock = threading.Lock()
+        self.load_extensions(OID)
         self._ada_gpio = None
         try:
             self._ada_gpio = GPIO.get_platform_gpio()
@@ -81,7 +82,6 @@ class SPIBus(JNTBus):
             self._ada_spi = SPI
         except :
             logger.exception("[%s] - Can't get SPI", self.__class__.__name__)
-        self.load_extensions(OID)
         self.export_attrs('_ada_spi', self._ada_spi)
         self.export_attrs('_ada_gpio', self._ada_gpio)
         self.export_attrs('spi_acquire', self.spi_acquire)
@@ -121,6 +121,9 @@ class SPIBus(JNTBus):
 
 def extend_hardware( self ):
     #You must choose either software or hardware bus
+
+    self.kernel_modprobe('spi-bcm2835')
+
     uuid="%s_port"%OID
     self.values[uuid] = self.value_factory['config_byte'](options=self.options, uuid=uuid,
         node_uuid=self.uuid,
@@ -133,10 +136,6 @@ def extend_hardware( self ):
     def start(mqttc, trigger_thread_reload_cb=None):
         """Start the bus"""
         logger.debug("[%s] - Start the bus %s", self.__class__.__name__, self.oid )
-        try:
-            os.system('modprobe spi-bcm2835')
-        except :
-            logger.exception("[%s] - Can't load spi-* kernel modules", self.__class__.__name__)
         return self._spih_start(mqttc, trigger_thread_reload_cb=trigger_thread_reload_cb)
     self.start = start
 
