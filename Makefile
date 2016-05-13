@@ -110,6 +110,7 @@ apidoc:
 doc: janidoc apidoc
 	- [ -f transitions_graph.py ] && python transitions_graph.py
 	-cp -Rf rst/* ${BUILDDIR}/janidoc/source
+	sed -i -e "s/MODULE_NAME/${MODULENAME}/g" ${BUILDDIR}/janidoc/source/tools/index.rst
 	make -C ${BUILDDIR}/janidoc html
 	cp ${BUILDDIR}/janidoc/source/README.rst README.rst
 	-ln -s $(BUILDDIR)/docs/html generated_doc
