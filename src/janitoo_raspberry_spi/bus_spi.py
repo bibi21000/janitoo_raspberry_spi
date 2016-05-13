@@ -109,15 +109,8 @@ class SPIBus(JNTBus):
         raise RuntimeError("Must be overloaded by descendant")
 
     def get_spi_device_pin(self, num):
-        """Return the CS pin corresponding to an hardawre SPI device"""
-        if num==0:
-            #map spi_device to pin number. On a pi2 0 ->18
-            dc_pin = 18
-        elif num==1:
-            #map spi_device to pin number. On a pi2 1 ->17 ?
-            dc_pin = 17
-        else:
-            dc_pin = num
+        """Return the CS pin corresponding to a SPI device"""
+        raise RuntimeError("Must be overloaded by descendant")
 
 def extend_hardware( self ):
     #You must choose either software or hardware bus
@@ -149,6 +142,17 @@ def extend_hardware( self ):
         finally:
             self.spi_release()
     self.get_spi_device = get_spi_device
+
+    def get_spi_device_pin(self, num):
+        """Return the CS pin corresponding to an hardawre SPI device"""
+        if num==0:
+            #map spi_device to pin number. On a pi2 0 ->18
+            dc_pin = 18
+        elif num==1:
+            #map spi_device to pin number. On a pi2 1 ->17 ?
+            dc_pin = 17
+        else:
+            dc_pin = num
 
 def extend_software( self ):
     #You must choose either software or hardware bus
@@ -186,3 +190,7 @@ def extend_software( self ):
         finally:
             self.spi_release()
     self.get_spi_device = get_spi_device
+
+    def get_spi_device_pin(self, num):
+        """Return the CS pin corresponding to a software SPI device"""
+        return num

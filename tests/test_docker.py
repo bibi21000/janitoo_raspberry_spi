@@ -43,7 +43,7 @@ from janitoo.runner import Runner, jnt_parse_args
 from janitoo.server import JNTServer
 from janitoo.utils import HADD_SEP, HADD
 
-class TestRaspberrySPISerser(JNTTDockerServer, JNTTDockerServerCommon):
+class TestRaspberrySPIHardwareSerser(JNTTDockerServer, JNTTDockerServerCommon):
     """Test the server
     """
     loglevel = logging.DEBUG
@@ -51,7 +51,22 @@ class TestRaspberrySPISerser(JNTTDockerServer, JNTTDockerServerCommon):
     broker_user = 'toto'
     broker_password = 'toto'
     server_class = PiServer
-    server_conf = "tests/data/janitoo_raspberry_spi.conf"
+    server_conf = "tests/data/janitoo_raspberry_spi_hardware.conf"
+    hadds = [HADD%(159,0) ]
+
+    def test_040_server_start_no_error_in_log(self):
+        JNTTDockerServer.onlyDockerTest()
+        JNTTDockerServerCommon.minimal_040_server_start_reload_restart(self)
+
+class TestRaspberrySPISoftwareSerser(JNTTDockerServer, JNTTDockerServerCommon):
+    """Test the server
+    """
+    loglevel = logging.DEBUG
+    path = '/tmp/janitoo_test'
+    broker_user = 'toto'
+    broker_password = 'toto'
+    server_class = PiServer
+    server_conf = "tests/data/janitoo_raspberry_spi_software.conf"
     hadds = [HADD%(159,0) ]
 
     def test_040_server_start_no_error_in_log(self):

@@ -116,6 +116,17 @@ doc: janidoc apidoc
 	@echo
 	@echo "Documentation finished."
 
+github.io:
+	git checkout --orphan gh-pages
+	git rm -rf .
+	touch .nojekyll
+	git add .nojekyll
+	git commit -m "Initial import" -a
+	git push origin gh-pages
+	git checkout master
+	@echo
+	@echo "github.io branch initialised."
+
 doc-commit: doc
 	git checkout gh-pages
 	cp -Rf build/docs/html/* .
