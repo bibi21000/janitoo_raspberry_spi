@@ -1,0 +1,19 @@
+janitoo_raspberry_spi package
+=============================
+
+Show janitoo's extensions.
+
+Core extensions
+---------------
+
+Threads
+^^^^^^^
+
+ - rpispi (janitoo_raspberry_spi.thread_spi:make_thread)
+
+Bus extensions 
+^^^^^^^^^^^^^^^
+
+ - ('rpispi', 'software') (janitoo_raspberry_spi.bus_spi:extend_software)
+ - ('rpispi', 'hardware') (janitoo_raspberry_spi.bus_spi:extend_hardware)
+

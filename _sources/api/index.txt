@@ -1,0 +1,30 @@
+janitoo_raspberry_spi package
+=============================
+
+Submodules
+----------
+
+janitoo_raspberry_spi.bus_spi module
+------------------------------------
+
+.. automodule:: janitoo_raspberry_spi.bus_spi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+janitoo_raspberry_spi.thread_spi module
+---------------------------------------
+
+.. automodule:: janitoo_raspberry_spi.thread_spi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: janitoo_raspberry_spi
+    :members:
+    :undoc-members:
+    :show-inheritance:
