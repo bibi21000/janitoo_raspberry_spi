@@ -137,7 +137,7 @@ def extend_hardware( self ):
         self.spi_acquire()
         try:
             return SPI.SpiDev(self.values["%s_port"%OID].data, device, max_speed_hz=max_speed_hz)
-        except:
+        except Exception:
             logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
         finally:
             self.spi_release()
@@ -185,7 +185,7 @@ def extend_software( self ):
             return SPI.BitBang(self._ada_gpio, self.values["%s_pin_clk"%OID].data,
                     self.values["%s_pin_mosi"%OID].data,
                     self.values["%s_pin_miso"%OID].data)
-        except:
+        except Exception:
             logger.exception('[%s] - Exception when getting device', self.__class__.__name__)
         finally:
             self.spi_release()
