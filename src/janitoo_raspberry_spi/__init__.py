@@ -25,3 +25,6 @@ try:                                                        # pragma: no cover
 except Exception:                                                     # pragma: no cover
     # bootstrapping                                         # pragma: no cover
     pass                                                    # pragma: no cover
+
+OID = 'rpispi'
+

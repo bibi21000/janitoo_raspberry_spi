@@ -58,7 +58,7 @@ assert(COMMAND_DESC[COMMAND_CAMERA_VIDEO] == 'COMMAND_CAMERA_VIDEO')
 assert(COMMAND_DESC[COMMAND_CAMERA_STREAM] == 'COMMAND_CAMERA_STREAM')
 ##############################################################
 
-from janitoo_raspberry_spi.thread_spi import OID
+from janitoo_raspberry_spi import OID
 
 class SPIBus(JNTBus):
     """A pseudo-bus to handle the Raspberry SPI Bus
