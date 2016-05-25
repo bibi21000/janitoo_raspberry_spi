@@ -162,11 +162,6 @@ develop:
 	@echo
 	@echo "Installation for developpers of ${MODULENAME} finished."
 
-docker-deps:
-	pip install smbus-cffi
-	@echo
-	@echo "Docker dependencies for ${MODULENAME} installed."
-
 directories:
 	-sudo mkdir /opt/janitoo
 	-sudo chown -Rf ${USER}:${USER} /opt/janitoo
@@ -192,6 +187,7 @@ docker-tests:
 	@echo "Docker tests for ${MODULENAME} finished."
 
 docker-deps:
+	pip install smbus-cffi
 	-cp -rf docker/config/* /opt/janitoo/etc/
 	-cp -rf docker/supervisor.conf.d/* /etc/supervisor/janitoo.conf.d/
 	-cp -rf docker/supervisor-tests.conf.d/* /etc/supervisor/janitoo-tests.conf.d/
@@ -199,6 +195,14 @@ docker-deps:
 	true
 	@echo
 	@echo "Docker dependencies for ${MODULENAME} installed."
+
+appliance-deps:
+	-cp -rf docker/appliance/* /opt/janitoo/etc/
+	-cp -rf docker/supervisor.conf.d/* /etc/supervisor/janitoo.conf.d/
+	-cp -rf docker/nginx/* /etc/nginx/conf.d/
+	@echo
+	@echo "Appliance dependencies for ${MODULENAME} installed."
+
 
 tests:
 	-mkdir -p ${BUILDDIR}/docs/html/tools/coverage
